@@ -38,7 +38,7 @@ const planeBaseMobile = {
 }
 
 const startX = "25vw";
-const startMobile = "40vw";
+const startMobile = "70vw";
 const endX = "0vw";
 const startY = -120;
 const endY = { p1: 15, p2: 8, p3: 1 };
