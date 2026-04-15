@@ -1,11 +1,31 @@
 
-import { useState } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useMotionValueEvent, useAnimationControls } from "motion/react";
 import { projects } from "../lib/static-data";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 
+const listVariants = {
+    hidden: {},
+    visible: {
+        transition: {
+            staggerChildren: 0.2,
+        }
+    }
+}
+
 const techVariants = {
-    hidden: { x: 75, opacity: 0 },
+    hidden: {
+        x: 75,
+        opacity: 0,
+        transition: {
+            x: {
+                type: "spring",
+                stiffness: 1000,
+                damping: 300
+            },
+            duration: 0.3
+        }
+    },
     visible: {
         x: 0,
         opacity: 1,
@@ -15,7 +35,7 @@ const techVariants = {
                 stiffness: 75,
                 damping: 15,
             },
-            duration: 0.9
+            duration: 0.8
         }
     }
 }
@@ -25,39 +45,39 @@ export default function ProjectCard({
     index,
     total,
     scrollYProgress,
-    techDelay,
+    techDelay
 }: {
     project: (typeof projects)[number];
     index: number;
     total: number;
     scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
-    techDelay: number
+    techDelay: number[];
 }) {
-    const [techVisible, setTechVisible] = useState(false);
-
-    const listVariants = {
-        hidden: {},
-        visible: {
-            transition: {
-                staggerChildren: 0.2,
-                delay: techDelay
-            }
-        }
-    }
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const hasAnimated = useRef(false);
 
     const center = (total - 1) / 2;
-    const stackedRotate = (index - center) * 5;
-    const stackedZ = total - Math.abs(index - center);
+    const stackedRotate = (center - index) * 5;
+    const stackedZ = total - index;
 
     // Stack vertically on scroll
-    const spreadY = (center - index) * 235
+    const spreadY = (index - center) * 235
     const y = useTransform(scrollYProgress, [0, 0.6], [0, spreadY]);
     const rotate = useTransform(scrollYProgress, [0, 0.6], [stackedRotate, 0]);
     const scale = useTransform(scrollYProgress, [0, 0.6], [0.92, 1]);
 
+    const controls = useAnimationControls();
+
     useMotionValueEvent(scrollYProgress, "change", (v) => {
-        setTechVisible(v >= 0.6);
-    })
+        if (v >= 0.55 && !hasAnimated.current) {
+            hasAnimated.current = true;
+            timeoutRef.current = setTimeout(() => controls.start("visible"), techDelay[index] * 300);
+        } else if (v < 0.55) {
+            hasAnimated.current = false;
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            controls.start("hidden");
+        }
+    });
 
     return (
         <motion.a
@@ -79,7 +99,7 @@ export default function ProjectCard({
             <motion.ul
                 className="flex flex-row flex-wrap items-center mt-8 mx-auto"
                 initial="hidden"
-                animate={techVisible ? "visible" : "hidden"}
+                animate={controls}
                 variants={listVariants}
             >
                 {project.tech.map((tech, i) => (

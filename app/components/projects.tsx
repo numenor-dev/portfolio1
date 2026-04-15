@@ -14,7 +14,13 @@ export default function Projects() {
 
     // h2 animates once cards finish animating
     const scrollOpacity = useTransform(scrollYProgress, [0.3, 1], [0, 1]);
-    const scrollY = useTransform(scrollYProgress, [0.55, 0.7], [-235, -230]);
+    const scrollY = useTransform(scrollYProgress, [0.55, 0.7], [-245, -240]);
+
+    const techDelays = projects.reduce<number[]>((total, project, i) => {
+        const prev = i === 0 ? 0 : total[i - 1] + projects[i - 1].tech.length * 0.3 + 1;
+        total.push(0.7 + prev);
+        return total;
+    }, []);
 
     return (
         <section ref={containerRef} className="relative h-[300vh]">
@@ -30,11 +36,8 @@ export default function Projects() {
                 </motion.h2>
 
                 <div className="relative flex items-center justify-center w-full">
-                    {projects.map((project, i) => {
-                        let techListDelay = 0;
-                        const techDelay = 0.7 + techListDelay;
-                        techListDelay += project.tech.length * 0.3 + 1;
 
+                    {projects.map((project, i) => {
                         return (
                             <ProjectCard
                                 key={project.title}
@@ -42,7 +45,7 @@ export default function Projects() {
                                 index={i}
                                 total={projects.length}
                                 scrollYProgress={scrollYProgress}
-                                techDelay={techDelay}
+                                techDelay={techDelays}
                             />
                         );
                     })}
