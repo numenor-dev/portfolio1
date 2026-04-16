@@ -23,7 +23,7 @@ const techVariants = {
                 stiffness: 1000,
                 damping: 300
             },
-            duration: 0.3
+            duration: 0.4
         }
     },
     visible: {
@@ -57,13 +57,13 @@ export default function ProjectCard({
     const hasAnimated = useRef(false);
 
     const center = (total - 1) / 2;
-    const stackedRotate = (center - index) * 5;
+    const stackedRotate = (center - index) * 7;
     const stackedZ = total - index;
 
     // Stack vertically on scroll
-    const spreadY = (index - center) * 235
+    const spreadY = (index - center) * 270
     const y = useTransform(scrollYProgress, [0, 0.6], [0, spreadY]);
-    const rotate = useTransform(scrollYProgress, [0, 0.6], [stackedRotate, 0]);
+    const rotate = useTransform(scrollYProgress, [0, 0.5], [stackedRotate, 0]);
     const scale = useTransform(scrollYProgress, [0, 0.6], [0.92, 1]);
 
     const controls = useAnimationControls();
@@ -84,20 +84,20 @@ export default function ProjectCard({
             href={project.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute w-[21em] sm:w-md md:w-lg lg:w-xl xl:w-2xl md:min-h-56 bg-zinc-950/70 ring ring-sky-900/50 rounded-2xl p-4 sm:p-6
+            className="absolute w-[21em] sm:w-md md:w-lg lg:w-xl xl:w-2xl min-h-64 bg-zinc-950/70 border-l border-r border-sky-800/80 rounded-3xl p-4 sm:p-6
                      shadow-3xl backdrop-blur-md cursor-pointer flex flex-col
-                     hover:ring-sky-400/40 transition-colors"
+                     hover:border-sky-300/40 transition-colors"
             style={{ y, rotate, scale, zIndex: stackedZ }}
         >
-            <ArrowTopRightOnSquareIcon className="absolute top-5 right-2 md:right-5 ml-1 size-4" />
-            <h3 className="text-lg md:text-xl lg:text-2xl mb-5 font-semibold text-zinc-200/90">
+            <ArrowTopRightOnSquareIcon className="absolute top-4 right-2 md:top-5 md:right-5 ml-1 size-3 md:size-4" />
+            <span className="text-lg md:text-xl lg:text-2xl mt-3 mb-5 font-semibold text-zinc-200/90">
                 {project.title}
-            </h3>
+            </span>
             <p className="text-sm md:text-base lg:text-lg text-zinc-200/80 leading-relaxed">
                 {project.desc}
             </p>
             <motion.ul
-                className="flex flex-row flex-wrap items-center mt-8 mx-auto"
+                className="flex flex-row flex-wrap items-center mt-10 mx-auto"
                 initial="hidden"
                 animate={controls}
                 variants={listVariants}
