@@ -1,4 +1,3 @@
-
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useAnimationControls } from "motion/react";
 import { projects } from "../lib/static-data";
@@ -84,7 +83,7 @@ export default function ProjectCard({
             href={project.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute w-[21em] sm:w-md md:w-lg lg:w-xl xl:w-2xl min-h-64 bg-zinc-950/70 border-l border-r border-sky-800/80 rounded-3xl p-4 sm:p-6
+            className="absolute w-[21em] sm:w-md md:w-lg lg:w-xl xl:w-2xl min-h-64 bg-zinc-950/70 border-l-2 border-r-2 border-sky-800/80 rounded-3xl p-4 sm:p-6
                      shadow-3xl backdrop-blur-md cursor-pointer flex flex-col
                      hover:border-sky-300/40 transition-colors"
             style={{ y, rotate, scale, zIndex: stackedZ }}
