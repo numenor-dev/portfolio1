@@ -1,11 +1,15 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useScroll, useAnimationControls, useMotionValueEvent } from "motion/react";
 import { experience } from "@/app/lib/static-data";
+import { useIsMobile } from "@/app/hooks/useIsMobile";
 
 
 export default function TimelineLine() {
     const h2Ref = useRef<HTMLHeadingElement>(null);
     const barRef = useRef<HTMLDivElement>(null);
+
+    const isMobile = useIsMobile();
+
     const h2Controls = useAnimationControls();
     const lineControls = useAnimationControls();
 
@@ -24,6 +28,10 @@ export default function TimelineLine() {
     const hasAnimated = useRef(false);
     const { scrollY } = useScroll();
 
+    const headerFinalX = isMobile ? 27 : 40
+
+    const headerFinalY = 125;
+
     function headerAnimation() {
         if (!h2Ref.current || !barRef.current) return { x: -300, y: 200 };
 
@@ -33,11 +41,11 @@ export default function TimelineLine() {
         const h2Center = h2Rect.left + h2Rect.width / 2;
 
         // Exact pixel distance from h2's current left edge to the bar's left edge
-        const targetX = barRect.left - h2Center;
+        const targetX = barRect.left - h2Center - headerFinalX;
 
         // After rotating -90deg around its center, offset by half the h2's width
         // so it sits vertically alongside the bar rather than floating above it
-         const targetY = h2Rect.width;
+         const targetY = h2Rect.width + headerFinalY;
 
         return { x: targetX, y: targetY };
     }
@@ -101,9 +109,21 @@ export default function TimelineLine() {
         });
     }
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (hasAnimated.current) {
+                hasAnimated.current = false;
+                resetAnimation();
+            }
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    })
+
     useMotionValueEvent(scrollY, "change", (v) => {
         if (v > 2000 && !hasAnimated.current) {
             hasAnimated.current = true;
+            h2Controls.stop();
             runAnimation();
         } else if (v <= 1800 && hasAnimated.current) {
             hasAnimated.current = false;
@@ -112,8 +132,8 @@ export default function TimelineLine() {
     });
 
     return (
-        <section className="px-2 md:px-16 lg:px-32 pb-40 mx-auto">
-            <div className="flex justify-center pr-16 mb-8">
+        <section className="mx-auto pl-7 sm:pl-16 md:pl-20 lg:pl-24 xl:pl-28 mb-20 sm:mt-0">
+            <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}
                     className="text-2xl md:text-4xl tracking-wider"
@@ -131,13 +151,13 @@ export default function TimelineLine() {
                     {/* The bar — height is driven by content, not a fixed vh */}
                     <motion.div
                         ref={barRef}
-                        className="w-1 h-screen rounded-full bg-sky-400/50 origin-top self-stretch shrink-0"
+                        className="w-1 self-strech rounded-full bg-sky-400/50 origin-top self-stretch shrink-0"
                         initial={{ scaleY: 0, opacity: 0 }}
                         animate={lineControls}
                     />
 
                     {/* Entries column */}
-                    <div className="flex flex-col gap-32 flex-1 min-w-0 pt-2">
+                    <div className="flex flex-col gap-28 flex-1 min-w-0 pt-2">
                         {experience.map((exp, i) => {
                             const { tick, date, card } = entryControls[i];
                             return (
@@ -146,7 +166,7 @@ export default function TimelineLine() {
                                     {/* Tick + date row */}
                                     <div className="flex items-center gap-4">
                                         <motion.div
-                                            className="h-1 w-8 md:w-12 bg-sky-400/50 origin-left shrink-0"
+                                            className="h-1 w-5 sm:w-10 md:w-16 bg-sky-400/50 origin-left shrink-0"
                                             initial={{ scaleX: 0, opacity: 0 }}
                                             animate={tick}
                                         />
@@ -161,7 +181,7 @@ export default function TimelineLine() {
 
                                     {/* Card */}
                                     <motion.div
-                                        className="pl-12 md:pl-16 flex flex-col gap-1"
+                                        className="pl-9 sm:pl-14 md:pl-21 flex flex-col gap-1"
                                         initial={{ opacity: 0, y: 12 }}
                                         animate={card}
                                     >
@@ -175,7 +195,7 @@ export default function TimelineLine() {
                                             {exp.highlights.map((h) => (
                                                 <li
                                                     key={h}
-                                                    className="text-base md:text-lg text-white/60 before:content-['–'] before:mr-2 before:text-sky-400/60"
+                                                    className="text-xs sm:text-sm md:text-base lg:text-lg text-white/60 before:content-['-'] before:mr-2 before:text-sky-400/60"
                                                 >
                                                     {h}
                                                 </li>
