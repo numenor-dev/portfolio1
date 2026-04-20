@@ -7,7 +7,7 @@ const listVariants = {
     hidden: {},
     visible: {
         transition: {
-            staggerChildren: 0.2,
+            staggerChildren: 0.3,
         }
     }
 }
@@ -89,18 +89,26 @@ export default function ProjectCard({
             style={{ y, rotate, scale, zIndex: stackedZ }}
         >
             <ArrowTopRightOnSquareIcon className="absolute top-4 right-2 md:top-5 md:right-5 ml-1 size-3 md:size-4" />
-            <span className="text-lg md:text-xl lg:text-2xl mt-3 mb-5 font-semibold text-zinc-200/90">
+            <span className="text-xl md:text-3xl my-3 md:my-4 font-semibold text-zinc-200/90">
                 {project.title}
             </span>
             <p className="text-sm md:text-base lg:text-lg text-zinc-200/80 leading-relaxed">
                 {project.desc}
             </p>
             <motion.ul
-                className="flex flex-row flex-wrap items-center mt-10 mx-auto"
+                className="flex flex-row flex-wrap items-center mt-10"
                 initial="hidden"
                 animate={controls}
                 variants={listVariants}
             >
+                <motion.span
+                className="pr-2 text-sm xl:text-base md:tracking-wide"
+                    initial="hidden"
+                    animate={controls}
+                    variants={techVariants}
+                >
+                    Built with:
+                </motion.span>
                 {project.tech.map((tech, i) => (
                     <motion.li
                         key={tech}

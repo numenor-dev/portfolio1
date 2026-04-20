@@ -26,16 +26,17 @@ export default function HeroSection() {
                     Hey, I&apos;m <span className="text-sky-400/60">Nick Ahlers.</span>
                 </motion.h1>
             </div>
-
-            <motion.p
-                className="max-w-lg text-base sm:text-xl font-normal leading-8"
-                initial={{ opacity: 0.001 }}
-                animate={stackLanded ? { opacity: 1 } : {}}
-                transition={{ duration: 1.2, delay: 0.6, ease: [0.76, 0, 0.24, 1] }}
-            >
-                I&apos;m a Frontend Developer with several years of fullstack experience.
-                I build intuitive, high-performing web apps from the ground up.
-            </motion.p>
+            <div className="px-2 sm:px-0 max-w-lg">
+                <motion.p
+                    className="text-base sm:text-xl font-normal leading-8"
+                    initial={{ opacity: 0.001 }}
+                    animate={stackLanded ? { opacity: 1 } : {}}
+                    transition={{ duration: 1.2, delay: 0.6, ease: [0.76, 0, 0.24, 1] }}
+                >
+                    I&apos;m a Frontend Developer with several years of fullstack experience.
+                    I build intuitive, high-performing web apps from the ground up.
+                </motion.p>
+            </div>
         </section>
     );
 }

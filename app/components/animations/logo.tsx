@@ -1,99 +1,73 @@
 'use client';
 
 import { useIsMobile } from "@/app/hooks/useIsMobile";
-import { motion, useAnimate } from "motion/react";
+import { motion, useAnimate, animate, useMotionValue } from "motion/react";
 import { useEffect } from "react";
 
-
-const planeBase = {
-    width: 25,
-    height: 25,
-    backgroundColor: "transparent",
-    borderWidth: "medium",
-    borderColor: "inherit",
-    position: "absolute" as const,
-    top: "50%",
-    left: "50%",
-    marginTop: -19,
-    marginLeft: -17,
-    rotateZ: 45,
-    rotateX: 55,
-    opacity: 0
-};
-
-const planeBaseMobile = {
-    width: 18,
-    height: 18,
-    backgroundColor: "transparent",
-    borderWidth: "medium",
-    borderColor: "inherit",
-    position: "absolute" as const,
-    top: "50%",
-    left: "50%",
-    marginTop: -19,
-    marginLeft: -12,
-    rotateZ: 45,
-    rotateX: 55,
-    opacity: 0
-}
-
-const startX = "25vw";
-const startMobile = "70vw";
+const startX = "30vw";
+const startMobile = "65vw";
 const endX = "0vw";
-const startY = -120;
-const endY = { p1: 15, p2: 8, p3: 1 };
-const endYMobile = { p1: 15, p2: 10, p3: 5}
-const dropEase = [0.33, 1, 0.68, 1] as const;
+const endXMobile = "1.5vw";
+const drawEase = [0.25, 0.1, 0.25, 1] as const;
 
 interface Props {
     onStackLanded: () => void;
 }
 
 export function LogoAnimation({ onStackLanded }: Props) {
-    const [scope, animate] = useAnimate();
+    const [scope, animateScope] = useAnimate();
     const isMobile = useIsMobile();
-    const startPositionMobile = isMobile ? startMobile : startX
-    const planeBaseSize = isMobile ? {...planeBaseMobile} : {...planeBase}
-    const widthMobile = isMobile ? {width: 32} : {width: 47}
-    const animateEndY = isMobile ? endYMobile : endY
+    const startPosition = isMobile ? startMobile : startX;
+    const endPosition = isMobile ? endXMobile : endX;
+    const svgSize = isMobile ? 31 : 43;
+
+    const p1 = useMotionValue(0);
+    const p2 = useMotionValue(0);
+    const p3 = useMotionValue(0);
 
     useEffect(() => {
         const run = async () => {
-            await animate("[data-stack]", { x: startPositionMobile }, { duration: 0 });
-            await animate("[data-plane]", { y: startY }, { duration: 0 });
+            await animateScope("[data-stack]", { x: startPosition }, { duration: 0 });
 
-            await animate("[data-plane='1']", { opacity: 1, y: animateEndY.p1 }, { duration: 0.36, ease: dropEase });
-            await animate("[data-plane='2']", { opacity: 1, y: animateEndY.p2 }, { duration: 0.32, ease: dropEase });
-            await animate("[data-plane='3']", { opacity: 1, y: animateEndY.p3 }, { duration: 0.28, ease: dropEase });
+            await animate(p1, 1, { duration: 0.50, ease: drawEase });
+            await animate(p2, 1, { duration: 0.40, ease: drawEase });
+            await animate(p3, 1, { duration: 0.40, ease: drawEase });
 
             await new Promise((r) => setTimeout(r, 120));
             onStackLanded();
 
-            await animate("[data-stack]", { x: endX }, { duration: 0.7, ease: [0.76, 0, 0.24, 1] });
+            await animateScope("[data-stack]", { x: endPosition }, { duration: 0.7, ease: [0.76, 0, 0.24, 1] });
         };
 
         run();
-    }, [animate, onStackLanded, startPositionMobile, animateEndY]);
+    }, [animateScope, onStackLanded, startPosition, p1, p2, p3, endPosition]);
 
     return (
-        <div
-            ref={scope}
-            style={{
-                perspective: 700,
-                flexShrink: 0
-            }}
-        >
-            <div
-                data-stack
-                style={{ position: "relative", ...widthMobile, height: 50 }}
-            >
-                {(["1", "2", "3"] as const).map((plane, i) => (
-                    <motion.div
-                        key={plane}
-                        data-plane={plane}
-                        style={{ ...planeBaseSize, zIndex: i + 1 }}
+        <div ref={scope} style={{ flexShrink: 0 }} className="pr-3 md:pr-2">
+            <div data-stack>
+                <svg
+                    viewBox="0 0 16 16"
+                    width={svgSize}
+                    height={svgSize}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={0.7}
+                >
+                    <motion.path
+                        d="M8 1.75 L1.75 5 L8 8.25 L14.25 5 Z"
+                        style={{ pathLength: p1 }}
                     />
-                ))}
+                    <motion.path
+                        d="M1.75 8 L8 11.25 L14.25 8"
+                        style={{ pathLength: p2 }}
+                    />
+                    <motion.path
+                        d="M1.75 11 L8 14.25 L14.25 11"
+                        style={{ pathLength: p3 }}
+                    />
+                </svg>
             </div>
         </div>
     );

@@ -15,8 +15,6 @@ export default function Projects() {
     // h2 animates once cards finish animating
     const scrollOpacity = useTransform(scrollYProgress, [0.35, 0.65], [0, 1]);
     const scrollY = useTransform(scrollYProgress, [0.55, 0.7], [-270, -270]);
-    const letterSpacing = useTransform(scrollYProgress,[0.1, 0.6], ["0em", "0.15em"]
-);
 
     const techDelays = projects.reduce<number[]>((total, project, i) => {
         const prev = i === 0 ? 0 : total[i - 1] + projects[i - 1].tech.length * 0.7 + 1;
@@ -25,14 +23,13 @@ export default function Projects() {
     }, []);
 
     return (
-        <section ref={containerRef} className="relative h-[300vh] mb-16">
+        <section ref={containerRef} className="relative h-[300vh] sm:mb-16">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
                 <motion.h2
-                    className="text-4xl font-semibold tracking-wider mb-1 sm:mb-2"
+                    className="text-3xl md:text-4xl font-semibold tracking-tighter mb-1 sm:mb-2"
                     style={{
                         opacity: scrollOpacity,
                         y: scrollY,
-                        letterSpacing
                     }}
                 >
                     Projects
