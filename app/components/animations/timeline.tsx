@@ -99,7 +99,7 @@ export default function TimeLine() {
     }, [resetAnimation])
 
     return (
-        <section className="mx-auto pl-9 md:pl-12 lg:pl-14 mb-36 md:-mt-7">
+        <section className="mx-auto pl-9 md:pl-12 lg:pl-14 m-32 md:mb-36 md:-mt-7">
             <div className="flex justify-center mb-8 w-96">
                 <motion.h2
                     ref={h2Ref}
@@ -153,12 +153,12 @@ export default function TimeLine() {
                                     <h3 className="text-xl md:text-3xl font-semibold tracking-wide">
                                         {exp.company}
                                         </h3>
-                                    <span className="text-base md:text-lg text-white/50">
+                                    <span className="text-base md:text-lg text-zinc-400/80">
                                         {exp.role} · {exp.location}
                                     </span>
                                     <ul className="mt-2 space-y-1">
                                         {exp.highlights.map((h) => (
-                                            <li key={h} className="text-xs sm:text-sm md:text-base lg:text-lg text-white/60 before:content-['-'] before:mr-2 before:text-sky-400/60">
+                                            <li key={h} className="text-xs sm:text-sm md:text-base lg:text-lg text-zinc-300/80 before:content-['-'] before:mr-2 before:text-sky-400/60">
                                                 {h}
                                             </li>
                                         ))}

@@ -6,11 +6,11 @@ export default function Footer() {
         <footer className="flex border-t border-zinc-50/20">
             <span className="flex mx-auto h-24 space-x-12 items-center">
                 <Link href="https://linkedin.com"
-                    className="hover:text-sky-400/80 transition-colors duration-500">
+                    className="border-b-2 border-transparent hover:border-b-sky-400/70 transition-colors duration-300">
                     LinkedIn
                 </Link>
                 <Link href="https://github.com"
-                    className="hover:text-sky-400/80 transition-colors duration-500">
+                    className="border-b-2 border-transparent hover:border-b-sky-400/70 transition-colors duration-300">
                     Github
                 </Link>
             </span>

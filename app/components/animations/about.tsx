@@ -37,7 +37,7 @@ export default function AboutAnimation() {
     const headerControls = useAnimationControls();
     const spanControls = useAnimationControls();
 
-    const isInView = useInView(containerRef, { amount: 0.3, once: true });
+    const isInView = useInView(containerRef, { amount: 0.5, once: true });
 
     const runAnimation = useCallback(async () => {
 
@@ -54,7 +54,7 @@ export default function AboutAnimation() {
         <section
             ref={containerRef}
             className="flex flex-col h-80 md:h-96 mx-auto">
-            <div className="max-w-lg space-y-1">
+            <div className="max-w-xl space-y-1">
                 <motion.h2
                     className="text-3xl md:text-4xl tracking-tighter"
                     initial="hidden"
@@ -64,14 +64,14 @@ export default function AboutAnimation() {
                     About Me
                 </motion.h2>
                 <motion.span
-                    className="text-xl md:text-2xl"
+                    className="text-lg md:text-xl text-zinc-300/90"
                     initial="hidden"
                     animate={spanControls}
                     variants={spanVariants}>
-                    Full-stack engineering with interfaces that are fast by default
-                    and considered by intention. I&apos;m more interested in the
-                    space between functional and felt using Next.js, TypeScript,
-                    Tailwind, and LLM integration.
+                    I bring full-stack engineering to interfaces that are
+                    fast by default and considered by intention. I focus on
+                    the space between functional and felt using Next.js,
+                    TypeScript, Tailwind, and AI integration.
                 </motion.span>
             </div>
         </section>

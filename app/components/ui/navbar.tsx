@@ -47,9 +47,9 @@ export default function Navbar() {
       <header className="relative z-50 mb-16">
 
         {/* Desktop nav */}
-        <div className="hidden md:flex justify-center px-4 pt-6">
+        <div className="hidden md:flex justify-center pt-7">
           <nav>
-            <ul className="flex items-center space-x-9 rounded-full px-7 py-2.5 text-sm bg-gray-700/30 font-medium shadow-lg backdrop-blur-sm">
+            <ul className="flex items-center space-x-12 rounded-full px-7 py-2.5 text-sm bg-slate-700/50 font-medium">
               {links.map(({ href, label }) => (
                 <li key={href}>
                   <Link
@@ -97,12 +97,11 @@ export default function Navbar() {
                     initial={{ opacity: 0, x: -16 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 + i * 0.06, duration: 0.25 }}
-                    className="border-b border-gray-700/50 last:border-none"
+                    className="border-b border-gray-700/50 last:border-none p-3"
                   >
                     <Link
                       href={href}
                       onClick={() => setMenuOpen(false)}
-                      className="block py-4 text-lg font-medium tracking-wide hover:text-sky-400 transition-colors duration-200"
                     >
                       {label}
                     </Link>
