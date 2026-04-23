@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useAnimationControls } from "motion/react";
-import { projects } from "../lib/static-data";
+import { projects } from "../../lib/static-data";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 
 const listVariants = {
@@ -8,6 +8,33 @@ const listVariants = {
     visible: {
         transition: {
             staggerChildren: 0.3,
+        }
+    }
+}
+
+const spanVariants = {
+    hidden: {
+        x: 75,
+        opacity: 0,
+        transition: {
+            x: {
+                type: "spring",
+                stiffness: 1000,
+                damping: 300
+            },
+            duration: 0.4
+        }
+    },
+    visible: {
+        x: 0,
+        opacity: 1,
+        transition: {
+            x: {
+                type: "spring",
+                stiffness: 75,
+                damping: 15,
+            },
+            duration: 0.4
         }
     }
 }
@@ -83,13 +110,13 @@ export default function ProjectCard({
             href={project.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute w-[21em] sm:w-md md:w-lg lg:w-xl xl:w-2xl min-h-64 bg-zinc-950/70 border-l-2 border-r-2 border-sky-800/80 rounded-3xl p-4 sm:p-6
+            className="absolute w-[21em] sm:w-md md:w-xl lg:w-2xl min-h-60 sm:min-h-64 bg-zinc-950/70 border-l-2 border-r-2 border-sky-700/80 rounded-3xl p-4 sm:p-6
                      shadow-3xl backdrop-blur-md cursor-pointer flex flex-col
                      hover:border-sky-300/40 transition-colors"
             style={{ y, rotate, scale, zIndex: stackedZ }}
         >
             <ArrowTopRightOnSquareIcon className="absolute top-4 right-2 md:top-5 md:right-5 ml-1 size-3 md:size-4" />
-            <span className="text-xl md:text-3xl my-3 md:my-4 font-semibold text-zinc-200/90">
+            <span className="text-xl md:text-2xl lg:text-3xl my-3 md:my-4 font-semibold text-zinc-200/90">
                 {project.title}
             </span>
             <p className="text-sm md:text-base lg:text-lg text-zinc-200/80 leading-relaxed">
@@ -105,7 +132,7 @@ export default function ProjectCard({
                 className="pr-2 text-sm xl:text-base md:tracking-wide"
                     initial="hidden"
                     animate={controls}
-                    variants={techVariants}
+                    variants={spanVariants}
                 >
                     Built with:
                 </motion.span>

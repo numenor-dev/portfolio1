@@ -1,13 +1,12 @@
 'use client';
 
-import { useIsMobile } from "@/app/hooks/useIsMobile";
+import { useIsMobileLogo } from "@/app/hooks/useIsMobile";
 import { motion, useAnimate, animate, useMotionValue } from "motion/react";
 import { useEffect } from "react";
 
-const startX = "30vw";
-const startMobile = "65vw";
+const startX = "28vw";
+const startMobile = "55vw";
 const endX = "0vw";
-const endXMobile = "1.5vw";
 const drawEase = [0.25, 0.1, 0.25, 1] as const;
 
 interface Props {
@@ -16,34 +15,37 @@ interface Props {
 
 export function LogoAnimation({ onStackLanded }: Props) {
     const [scope, animateScope] = useAnimate();
-    const isMobile = useIsMobile();
+    const isMobile = useIsMobileLogo();
     const startPosition = isMobile ? startMobile : startX;
-    const endPosition = isMobile ? endXMobile : endX;
-    const svgSize = isMobile ? 31 : 43;
+    const svgSize = isMobile ? 32 : 39;
 
     const p1 = useMotionValue(0);
     const p2 = useMotionValue(0);
     const p3 = useMotionValue(0);
+    const op2 = useMotionValue(0);
+    const op3 = useMotionValue(0);
 
     useEffect(() => {
         const run = async () => {
             await animateScope("[data-stack]", { x: startPosition }, { duration: 0 });
 
             await animate(p1, 1, { duration: 0.50, ease: drawEase });
-            await animate(p2, 1, { duration: 0.40, ease: drawEase });
-            await animate(p3, 1, { duration: 0.40, ease: drawEase });
+            op2.set(1);
+            await animate(p2, 1, { duration: 0.35, ease: drawEase });
+            op3.set(1);
+            await animate(p3, 1, { duration: 0.35, ease: drawEase });
 
             await new Promise((r) => setTimeout(r, 120));
             onStackLanded();
 
-            await animateScope("[data-stack]", { x: endPosition }, { duration: 0.7, ease: [0.76, 0, 0.24, 1] });
+            await animateScope("[data-stack]", { x: endX }, { duration: 0.7, ease: [0.76, 0, 0.24, 1] });
         };
 
         run();
-    }, [animateScope, onStackLanded, startPosition, p1, p2, p3, endPosition]);
+    }, [animateScope, onStackLanded, startPosition, p1, p2, p3, op2, op3]);
 
     return (
-        <div ref={scope} style={{ flexShrink: 0 }} className="pr-3 md:pr-2">
+        <div ref={scope} style={{ flexShrink: 0 }} className="pr-1">
             <div data-stack>
                 <svg
                     viewBox="0 0 16 16"
@@ -61,11 +63,11 @@ export function LogoAnimation({ onStackLanded }: Props) {
                     />
                     <motion.path
                         d="M1.75 8 L8 11.25 L14.25 8"
-                        style={{ pathLength: p2 }}
+                        style={{ pathLength: p2, opacity: op2 }}
                     />
                     <motion.path
                         d="M1.75 11 L8 14.25 L14.25 11"
-                        style={{ pathLength: p3 }}
+                        style={{ pathLength: p3, opacity: op3 }}
                     />
                 </svg>
             </div>

@@ -3,8 +3,9 @@
 import Hero from "./components/ui/hero";
 import Header from "./components/header";
 import Projects from "./components/projects";
-import TimeLine from "./components/animations/timeline";
-// import Experience from "./components/experience";
+import Experience from "./components/experience";
+import About from "./components/aboutme";
+import Footer from "./components/footer";
 
 export default function Home() {
   return (
@@ -14,8 +15,9 @@ export default function Home() {
           <Header />
           <Hero />
           <Projects />
-          <TimeLine />
-          {/* <Experience /> */}
+          <Experience />
+          <About />
+          <Footer />
         </div>
       </main>
     </div>

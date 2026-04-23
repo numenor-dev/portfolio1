@@ -1,7 +1,9 @@
-import { useRef, useEffect } from "react";
-import { motion, useScroll, useAnimationControls, useMotionValueEvent, Variants } from "motion/react";
+'use client';
+
+import { useRef, useEffect, useCallback } from "react";
+import { motion, useAnimationControls, useInView, Variants } from "motion/react";
 import { experience } from "@/app/lib/static-data";
-import { useIsMobile } from "@/app/hooks/useIsMobile";
+import { useIsMobileTimeLine } from "@/app/hooks/useIsMobile";
 
 const containerVariants: Variants = {
     hidden: {},
@@ -37,59 +39,53 @@ const cardVariants: Variants = {
 };
 
 
-export default function TimelineLine() {
+export default function TimeLine() {
     const h2Ref = useRef<HTMLHeadingElement>(null);
     const barRef = useRef<HTMLDivElement>(null);
+    const hasAnimated = useRef(false);
 
-    const isMobile = useIsMobile();
+    const isMobile = useIsMobileTimeLine();
 
     const h2Controls = useAnimationControls();
     const lineControls = useAnimationControls();
     const entriesControls = useAnimationControls();
 
-    const hasAnimated = useRef(false);
-    const { scrollY } = useScroll();
+    const isInView = useInView(barRef, { amount: 0.2, margin: "0px 0px -100px 0px", once: true });
 
     const headerFinalX = isMobile ? 20 : 33
 
     const headerFinalY = isMobile ? 180 : 130;
 
-    function headerAnimation() {
-        if (!h2Ref.current || !barRef.current) return { x: -300, y: 200 };
 
-        const h2Rect = h2Ref.current.getBoundingClientRect();
-        const barRect = barRef.current.getBoundingClientRect();
+    const runAnimation = useCallback(async () => {
+    if (!h2Ref.current || !barRef.current) return;
 
-        const h2Center = h2Rect.left + h2Rect.width / 2;
+    const h2Rect = h2Ref.current.getBoundingClientRect();
+    const barRect = barRef.current.getBoundingClientRect();
+    const h2Center = h2Rect.left + h2Rect.width / 2;
+    const targetX = barRect.left - h2Center - headerFinalX;
+    const targetY = h2Rect.width + headerFinalY;
 
-        // Exact pixel distance from h2's current left edge to the bar's left edge
-        const targetX = barRect.left - h2Center - headerFinalX;
+    hasAnimated.current = true;
 
-        // After rotating -90deg around its center, offset by half the h2's width
-        // so it sits vertically alongside the bar rather than floating above it
-        const targetY = h2Rect.width + headerFinalY;
+    await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.7, ease: "easeInOut" } });
+    await h2Controls.start({ rotate: -90, transition: { duration: 0.2, ease: "easeInOut" } });
+    await h2Controls.start({ y: targetY, transition: { duration: 0.5, ease: "easeInOut" } });
+    await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
 
-        return { x: targetX, y: targetY };
-    }
+    entriesControls.start("visible");
+}, [h2Controls, lineControls, entriesControls, headerFinalX, headerFinalY]);
 
-
-    async function runAnimation() {
-        const { x, y } = headerAnimation();
-
-        await h2Controls.start({ opacity: 1, x, transition: { duration: 1.7, ease: "easeInOut" } });
-        await h2Controls.start({ rotate: -90, transition: { duration: 0.2, ease: "easeInOut" } });
-        await h2Controls.start({ y, transition: { duration: 0.5, ease: "easeInOut" } });
-
-        await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
-
-        entriesControls.start("visible");
-    }
-
-    function resetAnimation() {
+    const resetAnimation = useCallback(() => {
         h2Controls.start({ opacity: 0, x: 0, y: 0, rotate: 0, transition: { duration: 0.5 } });
         lineControls.start({ scaleY: 0, opacity: 0, transition: { duration: 0.3 } });
         entriesControls.start("hidden");
-    }
+    }, [h2Controls, lineControls, entriesControls])
+
+    useEffect(() => {
+        if (isInView) runAnimation();
+        
+    }, [isInView, runAnimation])
 
     useEffect(() => {
         const handleResize = () => {
@@ -100,22 +96,10 @@ export default function TimelineLine() {
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    useMotionValueEvent(scrollY, "change", (v) => {
-        if (v > 2000 && !hasAnimated.current) {
-            hasAnimated.current = true;
-            h2Controls.stop();
-            runAnimation();
-        } else if (v <= 1800 && hasAnimated.current) {
-            hasAnimated.current = false;
-            resetAnimation();
-        }
-    });
+    }, [resetAnimation])
 
     return (
-        <section className="mx-auto pl-9 sm:pl-16 xl:pl-18 mb-20 sm:mt-0">
+        <section className="mx-auto pl-9 md:pl-12 lg:pl-14 mb-36 md:-mt-7">
             <div className="flex justify-center mb-8 w-96">
                 <motion.h2
                     ref={h2Ref}
@@ -134,7 +118,7 @@ export default function TimelineLine() {
                     {/* The bar — height is driven by content, not a fixed vh */}
                     <motion.div
                         ref={barRef}
-                        className="w-1 self-strech rounded-full bg-sky-400/50 origin-top self-stretch shrink-0"
+                        className="w-1 rounded-full bg-sky-400/50 origin-top self-stretch shrink-0"
                         initial={{ scaleY: 0, opacity: 0 }}
                         animate={lineControls}
                     />

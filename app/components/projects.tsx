@@ -1,8 +1,7 @@
-
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { projects } from "../lib/static-data";
-import ProjectCard from "./project-card";
+import ProjectCard from "./animations/project-card";
 
 export default function Projects() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -13,7 +12,7 @@ export default function Projects() {
     });
 
     // h2 animates once cards finish animating
-    const scrollOpacity = useTransform(scrollYProgress, [0.35, 0.65], [0, 1]);
+    const scrollOpacity = useTransform(scrollYProgress, [0.35, 0.55], [0, 1]);
     const scrollY = useTransform(scrollYProgress, [0.55, 0.7], [-270, -270]);
 
     const techDelays = projects.reduce<number[]>((total, project, i) => {
