@@ -11,7 +11,7 @@ const headerVariants: Variants = {
         opacity: 1,
         transition:
         {
-            duration: 1.3,
+            duration: 1.1,
             ease: "easeInOut" as const
         }
     },
@@ -25,7 +25,7 @@ const spanVariants: Variants = {
         opacity: 1,
         transition:
         {
-            duration: 1.3,
+            duration: 1,
             ease: "easeOut" as const
         }
     },
@@ -53,7 +53,7 @@ export default function AboutAnimation() {
     return (
         <section
             ref={containerRef}
-            className="flex flex-col h-80 md:h-96 mx-auto">
+            className="flex flex-col h-80 mx-auto">
             <div className="max-w-xl space-y-1">
                 <motion.h2
                     className="text-3xl md:text-4xl tracking-tighter"

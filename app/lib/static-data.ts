@@ -23,10 +23,11 @@ export const experience = [
         date: "2022 - 2025",
         location: "Lynnwood, WA",
         highlights: [
-            "50% LCP improvement via React PWA migration",
+            "50% faster page load via React PWA migration",
+            "40% quicker API responses after GraphQL restructuring",
+            "50% fewer checkout steps by integrating Aurus tokenization",
             "30% faster design-to-production via reusable component library",
-            "40% API response improvement via GraphQL restructuring",
-            "50% fewer checkout steps via Aurus tokenization",
+            
         ],
     },
     {
@@ -35,9 +36,15 @@ export const experience = [
         date: "2020 - 2022",
         location: "Bothell, WA",
         highlights: [
-            "$150K annual savings via Azure cloud consolidation",
+            "Saved $150K annually with Azure cloud consolidation",
             "99.98% ERP uptime via NGINX and SQL Server tuning",
             "200+ account migration from Google Workspace to O365",
         ],
     },
 ];
+
+export const techDelay = projects.reduce<number[]>((total, project, i) => {
+    const prev = i === 0 ? 0 : total[i - 1] + projects[i - 1].tech.length * 0.7 + 1;
+    total.push(0.7 + prev);
+    return total;
+}, []);

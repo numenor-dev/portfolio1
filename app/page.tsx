@@ -11,15 +11,13 @@ const Footer = dynamic(() => import("./components/footer"));
 
 export default function Home() {
   return (
-      <main>
-        <div className="bg-radial flex flex-col from-slate-600/10 from-5% to-almost-black to-60%">
-          <Header />
-          <Hero />
-          <Projects />
-          <Experience />
-          <About />
-          <Footer />
-        </div>
-      </main>
+    <div className="flex flex-col">
+      <Header />
+      <Hero />
+      <Projects />
+      <Experience />
+      <About />
+      <Footer />
+    </div>
   );
 }

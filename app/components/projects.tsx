@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { projects } from "../lib/static-data";
+import { projects, techDelay } from "../lib/static-data";
 import ProjectCard from "./animations/project-card";
 
 export default function Projects() {
@@ -13,22 +13,15 @@ export default function Projects() {
 
     // h2 animates once cards finish animating
     const scrollOpacity = useTransform(scrollYProgress, [0.35, 0.55], [0, 1]);
-    const scrollY = useTransform(scrollYProgress, [0.55, 0.7], [-270, -270]);
-
-    const techDelays = projects.reduce<number[]>((total, project, i) => {
-        const prev = i === 0 ? 0 : total[i - 1] + projects[i - 1].tech.length * 0.7 + 1;
-        total.push(0.7 + prev);
-        return total;
-    }, []);
 
     return (
-        <section ref={containerRef} className="relative h-[300vh] sm:mb-16">
+        <section ref={containerRef} className="relative h-[275vh] mb-16">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
                 <motion.h2
                     className="text-3xl md:text-4xl font-semibold tracking-tighter mb-1 sm:mb-2"
                     style={{
                         opacity: scrollOpacity,
-                        y: scrollY,
+                        y: -270,
                     }}
                 >
                     Projects
@@ -44,7 +37,7 @@ export default function Projects() {
                                 index={i}
                                 total={projects.length}
                                 scrollYProgress={scrollYProgress}
-                                techDelay={techDelays}
+                                techDelay={techDelay}
                             />
                         );
                     })}

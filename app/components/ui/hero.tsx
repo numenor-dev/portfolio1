@@ -28,7 +28,7 @@ export default function HeroSection() {
             </div>
             <div>
                 <motion.p
-                    className="text-base md:text-xl font-normal leading-8"
+                    className="text-lg md:text-xl font-normal leading-8"
                     initial={{ opacity: 0.001 }}
                     animate={stackLanded ? { opacity: 1 } : {}}
                     transition={{ duration: 1.2, delay: 0.6, ease: [0.76, 0, 0.24, 1] }}

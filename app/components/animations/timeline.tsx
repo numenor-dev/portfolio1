@@ -50,60 +50,64 @@ export default function TimeLine() {
     const lineControls = useAnimationControls();
     const entriesControls = useAnimationControls();
 
-    const isInView = useInView(barRef, { amount: 0.2, margin: "0px 0px -100px 0px", once: true });
+    const isInView = useInView(barRef, { amount: 1, margin: "0px 0px -300px 0px", once: true });
 
-    const headerFinalX = isMobile ? 20 : 33
+    const headerFinalX = isMobile ? 22 : 31
 
-    const headerFinalY = isMobile ? 180 : 130;
+    const headerFinalY = isMobile ? 180 : 127;
 
 
     const runAnimation = useCallback(async () => {
-    if (!h2Ref.current || !barRef.current) return;
+        if (!h2Ref.current || !barRef.current) return;
 
-    const h2Rect = h2Ref.current.getBoundingClientRect();
-    const barRect = barRef.current.getBoundingClientRect();
-    const h2Center = h2Rect.left + h2Rect.width / 2;
-    const targetX = barRect.left - h2Center - headerFinalX;
-    const targetY = h2Rect.width + headerFinalY;
+        const h2Rect = h2Ref.current.getBoundingClientRect();
+        const barRect = barRef.current.getBoundingClientRect();
+        const h2Center = h2Rect.left + h2Rect.width / 2;
+        const targetX = barRect.left - h2Center - headerFinalX;
+        const targetY = h2Rect.width + headerFinalY;
 
-    hasAnimated.current = true;
+        hasAnimated.current = true;
 
-    await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.7, ease: "easeInOut" } });
-    await h2Controls.start({ rotate: -90, transition: { duration: 0.2, ease: "easeInOut" } });
-    await h2Controls.start({ y: targetY, transition: { duration: 0.5, ease: "easeInOut" } });
-    await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
+        await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.7, ease: "easeInOut" } });
+        await h2Controls.start({ rotate: -90, transition: { duration: 0.2, ease: "easeInOut" } });
+        await h2Controls.start({ y: targetY, transition: { duration: 0.5, ease: "easeInOut" } });
+        await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
 
-    entriesControls.start("visible");
-}, [h2Controls, lineControls, entriesControls, headerFinalX, headerFinalY]);
+        entriesControls.start("visible");
+    }, [h2Controls, lineControls, entriesControls, headerFinalX, headerFinalY]);
 
-    const resetAnimation = useCallback(() => {
-        h2Controls.start({ opacity: 0, x: 0, y: 0, rotate: 0, transition: { duration: 0.5 } });
-        lineControls.start({ scaleY: 0, opacity: 0, transition: { duration: 0.3 } });
-        entriesControls.start("hidden");
-    }, [h2Controls, lineControls, entriesControls])
+    const resetAnimation = useCallback(async () => {
+        await Promise.all([
+            h2Controls.start({ opacity: 0, x: 0, y: 0, rotate: 0, transition: { duration: 0.5 } }),
+            lineControls.start({ scaleY: 0, opacity: 0, transition: { duration: 0.3 } }),
+            entriesControls.start("hidden"),
+        ]);
+    }, [h2Controls, lineControls, entriesControls]);
 
     useEffect(() => {
         if (isInView) runAnimation();
-        
+
     }, [isInView, runAnimation])
 
     useEffect(() => {
-        const handleResize = () => {
+        const handleResize = async () => {
             if (hasAnimated.current) {
                 hasAnimated.current = false;
-                resetAnimation();
+                await resetAnimation();
             }
+
+            if (isInView) runAnimation();
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, [resetAnimation])
+    }, [resetAnimation, isInView, runAnimation])
 
     return (
-        <section className="mx-auto pl-9 md:pl-12 lg:pl-14 m-32 md:mb-36 md:-mt-7">
-            <div className="flex justify-center mb-8 w-96">
+        <section className="mx-auto pl-16 mb-40">
+            <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}
-                    className="text-2xl md:text-4xl tracking-tighter"
+                    className="text-3xl md:text-4xl tracking-tighter"
                     initial={{ opacity: 0, x: 0, rotate: 0, y: 0 }}
                     animate={h2Controls}
                 >
@@ -111,11 +115,9 @@ export default function TimeLine() {
                 </motion.h2>
             </div>
             <div className="flex">
-
-                {/* Vertical bar + entries */}
                 <div className="flex flex-1 min-w-0">
 
-                    {/* The bar — height is driven by content, not a fixed vh */}
+                    {/* Vertical bar */}
                     <motion.div
                         ref={barRef}
                         className="w-1 rounded-full bg-sky-400/50 origin-top self-stretch shrink-0"
@@ -123,9 +125,9 @@ export default function TimeLine() {
                         animate={lineControls}
                     />
 
-                    {/* Entries column */}
+                    {/* Experience */}
                     <motion.div
-                        className="flex flex-col gap-16 sm:gap-22 flex-1 min-w-0"
+                        className="flex flex-col gap-16 sm:gap-24 flex-1 min-w-0"
                         initial="hidden"
                         animate={entriesControls}
                         variants={containerVariants}
@@ -147,12 +149,12 @@ export default function TimeLine() {
                                 </div>
 
                                 <motion.div
-                                className="pl-12 sm:pl-16 md:pl-21 flex flex-col gap-1 max-w-72 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl"
-                                variants={cardVariants}
+                                    className="pl-12 sm:pl-16 md:pl-20 flex flex-col gap-1 max-w-72 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl"
+                                    variants={cardVariants}
                                 >
                                     <h3 className="text-xl md:text-3xl font-semibold tracking-wide">
                                         {exp.company}
-                                        </h3>
+                                    </h3>
                                     <span className="text-base md:text-lg text-zinc-400/80">
                                         {exp.role} · {exp.location}
                                     </span>
