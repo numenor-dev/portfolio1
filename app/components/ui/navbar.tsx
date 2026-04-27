@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 const links = [
-  { href: "https://www.linkedin.com/in/nick-ahlers/", label: "LinkedIn" },
   { href: "https://github.com/numenor-dev", label: "Github" },
-  { href: "/#projects", label: "Resume" }
+  { href: "https://www.linkedin.com/in/nick-ahlers/", label: "LinkedIn" },
+  { href: "https://drive.google.com/file/d/1hdEYtfNKgjMmfheF_1R-DmD5CMsK0UAn/view?usp=sharing", label: "Resume" },
 ];
 
 const lineTransition = { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const };
@@ -42,8 +42,7 @@ function MenuIcon({ isOpen }: { isOpen: boolean }) {
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Lock body scroll when drawer is open — prevents horizontal bleed
-  // on WebKit mobile (iOS Safari, Chrome Android, Samsung Internet)
+  // Prevent horizontal bleed while drawer is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -63,6 +62,8 @@ export default function Navbar() {
                 <li key={href}>
                   <Link
                     href={href}
+                    target="_blank"
+                    rel="noopener referrer"
                     className="border-b-2 border-transparent hover:border-b-teal-400/70 transition-colors duration-300"
                   >
                     {label}
@@ -73,7 +74,7 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* Mobile toggle */}
+        {/* Mobile menu button */}
         <div className="flex justify-end px-7 pt-8 md:hidden">
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
@@ -87,11 +88,6 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/*
-        Outer wrapper: fixed + inset-0 establishes a hard stacking/overflow
-        context so transformed children can never bleed outside the viewport.
-        pointer-events-none on the wrapper, restored on the drawer itself.
-      */}
       <div className="fixed inset-0 z-40 pointer-events-none md:hidden">
         <AnimatePresence>
           {menuOpen && (
@@ -116,7 +112,12 @@ export default function Navbar() {
                       transition={{ delay: 0.1 + i * 0.06, duration: 0.25 }}
                       className="border-b border-gray-700/50 last:border-none p-3"
                     >
-                      <Link href={href} onClick={closeMenu}>
+                      <Link
+                        href={href}
+                        target="_blank"
+                        rel="noopener referrer"
+                        onClick={closeMenu}
+                      >
                         {label}
                       </Link>
                     </motion.li>
