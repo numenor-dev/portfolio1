@@ -4,8 +4,8 @@ import { useIsMobileLogo } from "@/app/hooks/useIsMobile";
 import { motion, useAnimate, animate, useMotionValue } from "motion/react";
 import { useEffect } from "react";
 
-const startX = "35vw";
-const startMobile = "55vw";
+const startX = "25vw";
+const startMobile = "45vw";
 const endX = "0vw";
 const drawEase = [0.25, 0.1, 0.25, 1] as const;
 
