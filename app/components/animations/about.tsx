@@ -11,7 +11,7 @@ const headerVariants: Variants = {
         opacity: 1,
         transition:
         {
-            duration: 1.1,
+            duration: 1,
             ease: "easeInOut" as const
         }
     },
@@ -22,7 +22,7 @@ const spanVariants: Variants = {
         opacity: 0
     },
     visible: {
-        opacity: 1,
+        opacity: 0.8,
         transition:
         {
             duration: 1,
@@ -37,7 +37,7 @@ export default function AboutAnimation() {
     const headerControls = useAnimationControls();
     const spanControls = useAnimationControls();
 
-    const isInView = useInView(containerRef, { amount: 0.5, once: true });
+    const isInView = useInView(containerRef, { amount: 0.5, margin: "0px 0px -200px 0px", once: true });
 
     const runAnimation = useCallback(async () => {
 
@@ -53,8 +53,8 @@ export default function AboutAnimation() {
     return (
         <section
             ref={containerRef}
-            className="flex flex-col h-80 mx-auto">
-            <div className="max-w-xl space-y-1">
+            className="flex flex-col my-32 mx-auto">
+            <div className="max-w-xs sm:max-w-xl space-y-1">
                 <motion.h2
                     className="text-3xl md:text-4xl tracking-tighter"
                     initial="hidden"

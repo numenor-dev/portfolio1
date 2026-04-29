@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 
-
 const LogoAnimation = dynamic(() => import("../animations/logo").then((mod) => mod.LogoAnimation), {
     ssr: false,
     loading: () => <span style={{ width: 47, height: 55, display: "inline-block" }} />

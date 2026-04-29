@@ -38,6 +38,7 @@ const cardVariants: Variants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
 };
 
+const headerFinalX = -25;
 
 export default function TimeLine() {
     const h2Ref = useRef<HTMLHeadingElement>(null);
@@ -52,8 +53,6 @@ export default function TimeLine() {
 
     const isInView = useInView(barRef, { amount: 1, margin: "0px 0px -300px 0px", once: true });
 
-    const headerFinalX = isMobile ? 22 : 31
-
     const headerFinalY = isMobile ? 180 : 127;
 
 
@@ -63,18 +62,26 @@ export default function TimeLine() {
         const h2Rect = h2Ref.current.getBoundingClientRect();
         const barRect = barRef.current.getBoundingClientRect();
         const h2Center = h2Rect.left + h2Rect.width / 2;
-        const targetX = barRect.left - h2Center - headerFinalX;
+        const targetX = barRect.left - h2Center + headerFinalX;
         const targetY = h2Rect.width + headerFinalY;
 
-        hasAnimated.current = true;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            await h2Controls.start({ opacity: 1, x: targetX, y: targetY, rotate: -90, transition: { duration: 0.5 } });
+            await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 0.5 } });
+            hasAnimated.current = true;
+            entriesControls.start("visible");
+            return;
+        }
 
-        await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.7, ease: "easeInOut" } });
+        await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.75, ease: "easeInOut" } });
         await h2Controls.start({ rotate: -90, transition: { duration: 0.2, ease: "easeInOut" } });
         await h2Controls.start({ y: targetY, transition: { duration: 0.5, ease: "easeInOut" } });
         await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
 
+        hasAnimated.current = true;
+
         entriesControls.start("visible");
-    }, [h2Controls, lineControls, entriesControls, headerFinalX, headerFinalY]);
+    }, [h2Controls, lineControls, entriesControls, headerFinalY]);
 
     const resetAnimation = useCallback(async () => {
         await Promise.all([
@@ -90,20 +97,26 @@ export default function TimeLine() {
     }, [isInView, runAnimation])
 
     useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
         const handleResize = async () => {
-            if (hasAnimated.current) {
-                hasAnimated.current = false;
-                await resetAnimation();
-            }
-
-            if (isInView) runAnimation();
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                if (hasAnimated.current) {
+                    hasAnimated.current = false;
+                    await resetAnimation();
+                }
+                if (isInView) runAnimation();
+            }, 150);
         };
         window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [resetAnimation, isInView, runAnimation])
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            clearTimeout(timer);
+        };
+    }, [resetAnimation, isInView, runAnimation]);
 
     return (
-        <section className="mx-auto pl-16 mb-40">
+        <section className="relative mx-auto pl-10 -mt-36 sm:mt-0">
             <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}
@@ -137,7 +150,7 @@ export default function TimeLine() {
 
                                 <div className="flex items-center gap-4">
                                     <motion.div
-                                        className="h-1 w-8 sm:w-12 md:w-16 bg-sky-400/50 origin-left shrink-0"
+                                        className="h-1 w-6 sm:w-12 md:w-16 bg-sky-400/50 origin-left shrink-0"
                                         variants={dashVariants}
                                     />
                                     <motion.span
@@ -149,7 +162,7 @@ export default function TimeLine() {
                                 </div>
 
                                 <motion.div
-                                    className="pl-12 sm:pl-16 md:pl-20 flex flex-col gap-1 max-w-72 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl"
+                                    className="pl-10 sm:pl-16 md:pl-20 flex flex-col gap-1 max-w-72 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl"
                                     variants={cardVariants}
                                 >
                                     <h3 className="text-xl md:text-3xl font-semibold tracking-wide">
