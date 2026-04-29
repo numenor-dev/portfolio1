@@ -116,7 +116,7 @@ export default function TimeLine() {
     }, [resetAnimation, isInView, runAnimation]);
 
     return (
-        <section className="relative mx-auto pl-10 -mt-36 sm:mt-0">
+        <section className="relative mx-auto pl-10 -mt-36 sm:-mt-7">
             <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}
