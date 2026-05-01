@@ -6,7 +6,7 @@ export default function Footer() {
         { href: "/", label: "Home" },
         { href: "https://github.com/numenor-dev", label: "Github" },
         { href: "https://www.linkedin.com/in/nick-ahlers/", label: "LinkedIn" },
-        { href: "https://drive.google.com/file/d/1hdEYtfNKgjMmfheF_1R-DmD5CMsK0UAn/view?usp=sharing", label: "Resume" },
+        { href: "https://drive.google.com/file/d/1kkW8Q4aUNFRU5HiaUEXNGrLURhW1DR4R/view?usp=sharing", label: "Resume" },
     ];
 
     const scrollToTop = () => {
