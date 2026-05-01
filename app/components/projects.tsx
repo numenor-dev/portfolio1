@@ -4,7 +4,7 @@ import { projects, techDelay } from "../lib/static-data";
 import ProjectCard from "./animations/project-card";
 
 export default function Projects() {
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -12,10 +12,10 @@ export default function Projects() {
     });
 
     // h2 animates once cards finish animating
-    const scrollOpacity = useTransform(scrollYProgress, [0.35, 0.55], [0, 1]);
+    const scrollOpacity = useTransform(scrollYProgress, [0.25, 0.45], [0.01, 1]);
 
     return (
-        <section ref={containerRef} className="relative h-[275vh] mb-16 -mt-32 sm:mt-0">
+        <section ref={containerRef} className="relative h-[200vh] mb-16 -mt-24 sm:mt-0">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
                 <motion.h2
                     className="text-3xl md:text-4xl font-semibold tracking-tighter mb-1 sm:mb-2"

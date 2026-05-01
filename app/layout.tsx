@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -27,8 +28,11 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} relative`}
     >
-      <body className="antialiased min-h-dvh text-zinc-300 font-sans bg-almost-black w-screen">
-        <main>{children}</main>
+      <body className="antialiased min-h-dvh text-zinc-300 font-sans bg-almost-black">
+        <main>
+          {children}
+        </main>
+        <SpeedInsights />
       </body>
     </html>
   );

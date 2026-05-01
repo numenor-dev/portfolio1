@@ -53,10 +53,10 @@ export default function AboutAnimation() {
     return (
         <section
             ref={containerRef}
-            className="flex flex-col my-32 mx-auto">
+            className="flex flex-col mt-36 mb-28 mx-auto">
             <div className="max-w-xs sm:max-w-xl space-y-1">
                 <motion.h2
-                    className="text-3xl md:text-4xl tracking-tighter"
+                    className="text-3xl md:text-4xl text-zinc-200 tracking-tighter"
                     initial="hidden"
                     animate={headerControls}
                     variants={headerVariants}
@@ -64,14 +64,15 @@ export default function AboutAnimation() {
                     About Me
                 </motion.h2>
                 <motion.span
-                    className="text-lg md:text-xl text-zinc-300/90"
+                    className="text-lg md:text-xl text-zinc-100"
                     initial="hidden"
                     animate={spanControls}
                     variants={spanVariants}>
-                    I bring full-stack engineering to interfaces that are
-                    fast by default and considered by intention. I focus on
-                    the space between functional and felt using Next.js,
-                    TypeScript, Tailwind, and AI integration.
+                    I build full-stack interfaces where
+                    speed and intuitive design are the default.
+                    I specialize in creating seamless web apps
+                    with <strong className="text-sky-300">Next.js</strong>, <strong className="text-sky-300">TypeScript</strong>,
+                    and intelligent <strong className="text-sky-300">AI integrations</strong>.
                 </motion.span>
             </div>
         </section>

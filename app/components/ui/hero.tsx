@@ -22,7 +22,7 @@ export default function HeroSection() {
                     animate={stackLanded ? { opacity: 1, clipPath: "inset(0 0 0 0)" } : {}}
                     transition={{ duration: 0.3, delay: 0.43 }}
                 >
-                    Hey, I&apos;m <span className="text-sky-400/60">Nick Ahlers.</span>
+                    Hey, I&apos;m <span className="text-sky-400/70">Nick Ahlers.</span>
                 </motion.h1>
             </div>
             <div>
@@ -33,7 +33,7 @@ export default function HeroSection() {
                     transition={{ duration: 1.2, delay: 0.6, ease: [0.76, 0, 0.24, 1] }}
                 >
                     I&apos;m a Frontend Developer with several years of fullstack experience.
-                    I build intuitive, high-performing web apps from the ground up.
+                    Scroll for more about me and my work.
                 </motion.p>
             </div>
         </section>

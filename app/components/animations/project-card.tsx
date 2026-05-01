@@ -87,18 +87,18 @@ export default function ProjectCard({
     const stackedZ = total - index;
 
     // Stack vertically on scroll
-    const spreadY = (index - center) * 270
-    const y = useTransform(scrollYProgress, [0, 0.6], [0, spreadY]);
+    const spreadY = (index - center) * 268;
+    const y = useTransform(scrollYProgress, [0, 0.4], [0, spreadY]);
     const rotate = useTransform(scrollYProgress, [0, 0.5], [stackedRotate, 0]);
-    const scale = useTransform(scrollYProgress, [0, 0.6], [0.92, 1]);
+    const scale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1]);
 
     const controls = useAnimationControls();
 
     useMotionValueEvent(scrollYProgress, "change", (v) => {
-        if (v >= 0.55 && !hasAnimated.current) {
+        if (v >= 0.5 && !hasAnimated.current) {
             hasAnimated.current = true;
             timeoutRef.current = setTimeout(() => controls.start("visible"), techDelay[index] * 300);
-        } else if (v < 0.55) {
+        } else if (v < 0.5) {
             hasAnimated.current = false;
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
             controls.start("hidden");

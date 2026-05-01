@@ -73,7 +73,8 @@ export default function TimeLine() {
             return;
         }
 
-        await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.75, ease: "easeInOut" } });
+        await h2Controls.start({ opacity: 0, x: targetX + 70, transition: { duration: 0.5, ease: "easeInOut" } });
+        await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.7, ease: "easeInOut" } });
         await h2Controls.start({ rotate: -90, transition: { duration: 0.2, ease: "easeInOut" } });
         await h2Controls.start({ y: targetY, transition: { duration: 0.5, ease: "easeInOut" } });
         await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
@@ -116,7 +117,7 @@ export default function TimeLine() {
     }, [resetAnimation, isInView, runAnimation]);
 
     return (
-        <section className="relative mx-auto pl-10 -mt-36 sm:-mt-7">
+        <section className="relative mx-auto pl-6 -mt-36 sm:-mt-10 2xl:-mt-32">
             <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}
@@ -173,7 +174,7 @@ export default function TimeLine() {
                                     </span>
                                     <ul className="mt-2 space-y-1">
                                         {exp.highlights.map((h) => (
-                                            <li key={h} className="text-xs sm:text-sm md:text-base lg:text-lg text-zinc-300/80 before:content-['-'] before:mr-2 before:text-sky-400/60">
+                                            <li key={h} className="text-xs sm:text-sm md:text-base lg:text-lg text-zinc-200/80 before:content-['-'] before:mr-2 before:text-sky-300/60">
                                                 {h}
                                             </li>
                                         ))}
