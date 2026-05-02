@@ -15,7 +15,7 @@ export default function Projects() {
     const scrollOpacity = useTransform(scrollYProgress, [0.25, 0.45], [0.01, 1]);
 
     return (
-        <section ref={containerRef} className="relative h-[200vh] mb-16 -mt-24 sm:mt-0">
+        <section ref={containerRef} className="relative h-[200vh] -mt-24 sm:mt-0">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
                 <motion.h2
                     className="text-3xl md:text-4xl font-semibold tracking-tighter mb-1 sm:mb-2"

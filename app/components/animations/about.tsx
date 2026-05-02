@@ -37,7 +37,7 @@ export default function AboutAnimation() {
     const headerControls = useAnimationControls();
     const spanControls = useAnimationControls();
 
-    const isInView = useInView(containerRef, { amount: 0.5, margin: "0px 0px -200px 0px", once: true });
+    const isInView = useInView(containerRef, { amount: 0.5, margin: "0px 0px -150px 0px", once: true });
 
     const runAnimation = useCallback(async () => {
 
@@ -53,7 +53,7 @@ export default function AboutAnimation() {
     return (
         <section
             ref={containerRef}
-            className="flex flex-col mt-36 mb-28 mx-auto">
+            className="flex flex-col mt-32 mb-28 mx-auto">
             <div className="max-w-xs sm:max-w-xl space-y-1">
                 <motion.h2
                     className="text-3xl md:text-4xl text-zinc-200 tracking-tighter"

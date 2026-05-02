@@ -51,13 +51,24 @@ export default function TimeLine() {
     const lineControls = useAnimationControls();
     const entriesControls = useAnimationControls();
 
-    const isInView = useInView(barRef, { amount: 1, margin: "0px 0px -300px 0px", once: true });
+    const isInView = useInView(barRef, { amount: 1, margin: "0px 0px -200px 0px", once: true });
 
     const headerFinalY = isMobile ? 180 : 127;
 
-
     const runAnimation = useCallback(async () => {
         if (!h2Ref.current || !barRef.current) return;
+
+        if (isMobile) {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                await h2Controls.start({ opacity: 1, transition: { duration: 0 } });
+            } else {
+                await h2Controls.start({ opacity: 1, x: -30, transition: { duration: 1.5, ease: "easeOut" } });
+            }
+            await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
+            hasAnimated.current = true;
+            entriesControls.start("visible");
+            return;
+        }
 
         const h2Rect = h2Ref.current.getBoundingClientRect();
         const barRect = barRef.current.getBoundingClientRect();
@@ -75,14 +86,15 @@ export default function TimeLine() {
 
         await h2Controls.start({ opacity: 0, x: targetX + 70, transition: { duration: 0.5, ease: "easeInOut" } });
         await h2Controls.start({ opacity: 1, x: targetX, transition: { duration: 1.7, ease: "easeInOut" } });
-        await h2Controls.start({ rotate: -90, transition: { duration: 0.2, ease: "easeInOut" } });
+        await h2Controls.start({ rotate: -90, transition: { duration: 0.35, ease: "easeInOut" } });
         await h2Controls.start({ y: targetY, transition: { duration: 0.5, ease: "easeInOut" } });
         await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
 
         hasAnimated.current = true;
 
         entriesControls.start("visible");
-    }, [h2Controls, lineControls, entriesControls, headerFinalY]);
+    }, [isMobile, h2Controls, lineControls, entriesControls, headerFinalY]);
+
 
     const resetAnimation = useCallback(async () => {
         await Promise.all([
@@ -117,11 +129,11 @@ export default function TimeLine() {
     }, [resetAnimation, isInView, runAnimation]);
 
     return (
-        <section className="relative mx-auto pl-6 -mt-36 sm:-mt-10 2xl:-mt-32">
+        <section className="relative mx-auto md:pl-7 -mt-[15%] sm:mt-7 2xl:-mt-32">
             <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}
-                    className="text-3xl md:text-4xl tracking-tighter"
+                    className="text-3xl md:text-4xl tracking-tighter mb-2 sm:mb-0"
                     initial={{ opacity: 0, x: 0, rotate: 0, y: 0 }}
                     animate={h2Controls}
                 >

@@ -88,17 +88,16 @@ export default function ProjectCard({
 
     // Stack vertically on scroll
     const spreadY = (index - center) * 268;
-    const y = useTransform(scrollYProgress, [0, 0.4], [0, spreadY]);
-    const rotate = useTransform(scrollYProgress, [0, 0.5], [stackedRotate, 0]);
-    const scale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1]);
+    const y = useTransform(scrollYProgress, [0, 0.35], [0, spreadY]);
+    const rotate = useTransform(scrollYProgress, [0, 0.4], [stackedRotate, 0]);
 
     const controls = useAnimationControls();
 
     useMotionValueEvent(scrollYProgress, "change", (v) => {
-        if (v >= 0.5 && !hasAnimated.current) {
+        if (v >= 0.35 && !hasAnimated.current) {
             hasAnimated.current = true;
             timeoutRef.current = setTimeout(() => controls.start("visible"), techDelay[index] * 300);
-        } else if (v < 0.5) {
+        } else if (v < 0.35) {
             hasAnimated.current = false;
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
             controls.start("hidden");
@@ -113,7 +112,7 @@ export default function ProjectCard({
             className="absolute w-[21em] sm:w-md md:w-xl lg:w-2xl min-h-60 sm:min-h-64 bg-zinc-950/70 border-l-2 border-r-2 border-sky-700/80 rounded-3xl p-4 sm:p-6
                      shadow-3xl backdrop-blur-md cursor-pointer flex flex-col
                      hover:border-sky-300/40 transition-colors"
-            style={{ y, rotate, scale, zIndex: stackedZ }}
+            style={{ y, rotate, zIndex: stackedZ }}
         >
             <ArrowTopRightOnSquareIcon className="absolute top-4 right-2 md:top-5 md:right-5 ml-1 size-3 md:size-4" />
             <span className="text-xl md:text-2xl lg:text-3xl my-3 md:my-4 font-semibold text-zinc-200/90">
