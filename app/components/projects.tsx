@@ -16,7 +16,7 @@ export default function Projects() {
 
     return (
         <section ref={containerRef} className="relative h-[200vh] -mt-24 sm:mt-0">
-            <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
+            <div className="sticky top-0 h-dvh flex flex-col items-center justify-center">
                 <motion.h2
                     className="text-3xl md:text-4xl font-semibold tracking-tighter mb-1 sm:mb-2"
                     style={{

@@ -4,7 +4,6 @@ import { projects } from "../../lib/static-data";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 
 const listVariants = {
-    hidden: {},
     visible: {
         transition: {
             staggerChildren: 0.3,
@@ -14,7 +13,7 @@ const listVariants = {
 
 const spanVariants = {
     hidden: {
-        x: 75,
+        x: 20,
         opacity: 0,
         transition: {
             x: {
@@ -41,7 +40,7 @@ const spanVariants = {
 
 const techVariants = {
     hidden: {
-        x: 75,
+        x: 20,
         opacity: 0,
         transition: {
             x: {
@@ -110,8 +109,8 @@ export default function ProjectCard({
             target="_blank"
             rel="noopener noreferrer"
             className="absolute w-[21em] sm:w-md md:w-xl lg:w-2xl min-h-60 sm:min-h-64 bg-zinc-950/70 border-l-2 border-r-2 border-sky-700/80 rounded-3xl p-4 sm:p-6
-                     shadow-3xl backdrop-blur-md cursor-pointer flex flex-col
-                     hover:border-sky-300/40 transition-colors"
+                     shadow-3xl backdrop-blur-sm cursor-pointer flex flex-col
+                     hover:border-sky-300/40 transition-colors overflow-hidden"
             style={{ y, rotate, zIndex: stackedZ }}
         >
             <ArrowTopRightOnSquareIcon className="absolute top-4 right-2 md:top-5 md:right-5 ml-1 size-3 md:size-4" />

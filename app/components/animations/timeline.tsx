@@ -58,23 +58,24 @@ export default function TimeLine() {
     const runAnimation = useCallback(async () => {
         if (!h2Ref.current || !barRef.current) return;
 
+        const h2Rect = h2Ref.current.getBoundingClientRect();
+        const barRect = barRef.current.getBoundingClientRect();
+        const h2Center = h2Rect.left + h2Rect.width / 2;
+        const targetX = barRect.left - h2Center + headerFinalX;
+        const targetXMobile = barRect.left - (h2Center * 0.35);
+        const targetY = h2Rect.width + headerFinalY;
+
         if (isMobile) {
             if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
                 await h2Controls.start({ opacity: 1, transition: { duration: 0 } });
             } else {
-                await h2Controls.start({ opacity: 1, x: -30, transition: { duration: 1.5, ease: "easeOut" } });
+                await h2Controls.start({ opacity: 1, x: targetXMobile, transition: { duration: 1.5, ease: "easeOut" } });
             }
             await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
             hasAnimated.current = true;
             entriesControls.start("visible");
             return;
         }
-
-        const h2Rect = h2Ref.current.getBoundingClientRect();
-        const barRect = barRef.current.getBoundingClientRect();
-        const h2Center = h2Rect.left + h2Rect.width / 2;
-        const targetX = barRect.left - h2Center + headerFinalX;
-        const targetY = h2Rect.width + headerFinalY;
 
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
             await h2Controls.start({ opacity: 1, x: targetX, y: targetY, rotate: -90, transition: { duration: 0.5 } });
