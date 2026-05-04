@@ -69,7 +69,7 @@ export default function TimeLine() {
             if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
                 await h2Controls.start({ opacity: 1, transition: { duration: 0 } });
             } else {
-                await h2Controls.start({ opacity: 1, x: targetXMobile, transition: { duration: 1.5, ease: "easeOut" } });
+                await h2Controls.start({ opacity: 1, x: targetXMobile - 5, transition: { duration: 1.5, ease: "easeOut" } });
             }
             await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
             hasAnimated.current = true;
@@ -112,6 +112,8 @@ export default function TimeLine() {
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
+        let previousWidth = window.innerWidth;
+        const threshold = 300;
         const handleResize = async () => {
             clearTimeout(timer);
             timer = setTimeout(async () => {
@@ -122,7 +124,14 @@ export default function TimeLine() {
                 if (isInView) runAnimation();
             }, 150);
         };
-        window.addEventListener("resize", handleResize);
+        window.addEventListener("resize", () => {
+            const currentWidth = window.innerWidth;
+            const widthChange = Math.abs(currentWidth - previousWidth) >= threshold;
+            if (widthChange) {
+                previousWidth = currentWidth;
+                handleResize();
+            }
+        });
         return () => {
             window.removeEventListener("resize", handleResize);
             clearTimeout(timer);
@@ -130,7 +139,7 @@ export default function TimeLine() {
     }, [resetAnimation, isInView, runAnimation]);
 
     return (
-        <section className="relative mx-auto md:pl-7 -mt-[15%] sm:mt-7 2xl:-mt-32">
+        <section className="relative mx-auto -mt-7 md:pl-7 sm:mt-7 2xl:-mt-32">
             <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}
