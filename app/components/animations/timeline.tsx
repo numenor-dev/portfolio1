@@ -53,23 +53,24 @@ export default function TimeLine() {
 
     const isInView = useInView(barRef, { amount: 1, margin: "0px 0px -200px 0px", once: true });
 
-    const headerFinalY = isMobile ? 180 : 127;
+    const headerFinalY = 127;
 
     const runAnimation = useCallback(async () => {
+        if (isMobile === null) return;
         if (!h2Ref.current || !barRef.current) return;
 
         const h2Rect = h2Ref.current.getBoundingClientRect();
         const barRect = barRef.current.getBoundingClientRect();
         const h2Center = h2Rect.left + h2Rect.width / 2;
         const targetX = barRect.left - h2Center + headerFinalX;
-        const targetXMobile = barRect.left - (h2Center * 0.35);
+        const targetXMobile = barRect.left - (h2Center * 0.37);
         const targetY = h2Rect.width + headerFinalY;
 
         if (isMobile) {
             if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
                 await h2Controls.start({ opacity: 1, transition: { duration: 0 } });
             } else {
-                await h2Controls.start({ opacity: 1, x: targetXMobile - 5, transition: { duration: 1.5, ease: "easeOut" } });
+                await h2Controls.start({ opacity: 1, x: targetXMobile, transition: { duration: 1.5, ease: "easeOut" } });
             }
             await lineControls.start({ scaleY: 1, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
             hasAnimated.current = true;
@@ -124,22 +125,22 @@ export default function TimeLine() {
                 if (isInView) runAnimation();
             }, 150);
         };
-        window.addEventListener("resize", () => {
+        const onResize = () => {
             const currentWidth = window.innerWidth;
-            const widthChange = Math.abs(currentWidth - previousWidth) >= threshold;
-            if (widthChange) {
+            if (Math.abs(currentWidth - previousWidth) >= threshold) {
                 previousWidth = currentWidth;
                 handleResize();
             }
-        });
+        };
+        window.addEventListener("resize", onResize);
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", onResize);
             clearTimeout(timer);
         };
     }, [resetAnimation, isInView, runAnimation]);
 
     return (
-        <section className="relative mx-auto -mt-7 md:pl-7 sm:mt-7 2xl:-mt-32">
+        <section className="relative mx-auto -mt-12 md:pl-7 sm:mt-7 2xl:-mt-32 [@media(max-height:750px)]:mt-10 [@media(max-height:750px)]:md:pl-0">
             <div className="flex justify-center mb-8">
                 <motion.h2
                     ref={h2Ref}

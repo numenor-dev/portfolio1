@@ -2,24 +2,16 @@
 
 import { useState, useEffect } from "react";
 
-export function useIsMobileLogo(breakpoint = 775) {
-    const [isMobile, setIsMobile] = useState(false);
+function useIsBelowWidth(breakpoint: number): boolean | null {
+    const [isBelow, setIsBelow] = useState<boolean | null>(null);
     useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < breakpoint);
+        const check = () => setIsBelow(window.innerWidth < breakpoint);
         check();
         window.addEventListener("resize", check);
         return () => window.removeEventListener("resize", check);
     }, [breakpoint]);
-    return isMobile;
+    return isBelow;
 }
 
-export function useIsMobileTimeLine(breakpoint = 650) {
-    const [isMobile, setIsMobile] = useState(false);
-    useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < breakpoint);
-        check();
-        window.addEventListener("resize", check);
-        return () => window.removeEventListener("resize", check);
-    }, [breakpoint]);
-    return isMobile;
-}
+export const useIsMobileLogo = () => useIsBelowWidth(775);
+export const useIsMobileTimeLine = () => useIsBelowWidth(650);
