@@ -1,6 +1,6 @@
 # nickahlers.com
 
-Personal portfolio site built to showcase my projects, skills, and experience as a Frontend Engineer.
+Professional portfolio site I built to showcase projects, skills, and experience as a Frontend Engineer.
 Live site → nickahlers.com
 
 ## Tech Stack
